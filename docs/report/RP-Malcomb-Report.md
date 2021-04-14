@@ -45,7 +45,7 @@ The replication study will use R.
 
 ## Materials and Procedure
 
-# Original Workflow
+## Original Workflow
 ### Data:
 
 - UNEP/GRID (raster)
