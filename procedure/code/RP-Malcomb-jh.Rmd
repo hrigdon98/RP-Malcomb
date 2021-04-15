@@ -12,6 +12,7 @@ output: html_document
 
 ### [https://gis4dev.github.io/](https://gis4dev.github.io/)
 
+
 ```{r libraries, include = F}
 
 packages = c("downloader","haven","stars","dplyr","sf","rdhs", "classInt", "readr", "ggplot2", "here", "s2")
@@ -34,7 +35,7 @@ sf_use_s2(T)
 ```
 
 ```{r download data}
-
+# downloading data - here() handles file paths
 private_r = here("data","raw","private")
 public_r = here("data","raw","public")
 
@@ -87,25 +88,32 @@ dhs_downloads = get_datasets(
 ```
 
 ```{r 2010 adaptive capacity data}
+
+# reading in traditional authorities and livelihood zones
 ta = read_sf(here("data", "raw", "public","traditional_authorities", "MWI_adm2.shp")) %>%
-  st_make_valid() 
+  st_make_valid() # fixing geometries
 
 lhz = read_sf(here("data", "raw", "public", "livelihood_zones", "MW_LHZ_2009.shp")) %>% st_make_valid()
 
+# village points data
 dhsclusters_2010 = readRDS(dhs_downloads$MWGE62FL) %>%
   as("sf") %>% 
-  st_transform(3395) %>% 
+  st_transform(3395) %>%  # reproject 
   # joining id for traditional authorities and livelihood zones to dhs clusters
+  # allows us to know which ta every survey point belongs to so we can aggregate by attribute later
+  # adds ta and lhz id info to village points
   st_join(st_transform(select(ta, ID_2),3395)) %>%
   st_join(st_transform(select(lhz, FNID),3395)) %>%
   rename(ta_id = ID_2,
          lhz_id = FNID,
          urban_rural = URBAN_RURA)
 
+# household level survey responses - not spatial
 dhshh_2010 = readRDS(dhs_downloads$MWHR61SV) %>% zap_labels() 
 ```
 
 ```{r households to remove (2010)}
+# this chunk removes unknown/nodata values
 rmv_2010 = dhshh_2010 %>%  filter(
   HV246A == 98 |
     HV246A == 99 |
@@ -126,25 +134,27 @@ rmv_2010 = dhshh_2010 %>%  filter(
     HV226  == 96 |
     HV207  ==  9 
 ) %>% pull(HHID)
+
 ```
 
 ```{r capacity in traditional authorities 2010}
+# returns adaptive capacity aggregated by ta (non spatial)
 ta_capacity_2010 = dhshh_2010 %>%
-  # joining traditional authority ids and urban_rural column 
+  # joining traditional authority ids and urban_rural column by cluster ID number
   left_join(st_drop_geometry(select(dhsclusters_2010, DHSCLUST, ta_id, urban_rural)), by = c("HV001" = "DHSCLUST")) %>%
-  select(
+  select( # join only a few columns
     HHID,
     HV001,
     HV002,
     ta_id,
-    urban_rural,
-    HV246A,
-    HV246D,
-    HV246E,
-    HV246G,
-    HV248,
-    HV245,
-    HV271,
+    urban_rural, # indicates rural/urban
+    HV246A,  # livelihood indicators - livestock, land, water, etc
+    HV246D,  # goats
+    HV246E,  # sheep
+    HV246G,  # pigs
+    HV248,   # sick people age 18-59
+    HV245,   # land owned
+    HV271,   # wealth
     HV251,
     HV204,
     HV206,
@@ -161,12 +171,12 @@ ta_capacity_2010 = dhshh_2010 %>%
   filter(!(is.na(HV246A) & is.na(HV246D) & is.na(HV246E)  & is.na(HV246G) )) %>% 
   # 24028 obs. of 19 variables 
   # using rowwise() to find sum of livestock by household 
-  rowwise %>%
+  rowwise %>%   # sums livestock columns across each row
   mutate(hhlivestock = sum(HV246A, HV246D, HV246E, HV246G, na.rm = T)) %>%
   ungroup %>%
   # using percent_rank(), those  
   # in cases where desc() is used, having a greater value before ranked makes a household more vulnerable 
-  mutate(
+  mutate( # percent_rank() returns percentile between 0 and 1 - multiplying by 4 and adding 1 gives values 1-5 (quintiles)
     livestock = percent_rank(hhlivestock) * 4 + 1,
     sick = percent_rank(desc(HV248)) * 4 + 1,
     land = percent_rank(HV245) * 4 + 1,
@@ -182,7 +192,7 @@ ta_capacity_2010 = dhshh_2010 %>%
     radio = percent_rank(HV207) * 4 + 1,
     urbanruralscore = ifelse(urban_rural == "U", 5, 1)
   ) %>%
-  # calculating capacity score based on table 2 in malcomb et al 
+  # calculating capacity score based on weights in table 2 in malcomb et al 
   rowwise %>%
   mutate(
     capacity = sum(
@@ -205,7 +215,7 @@ ta_capacity_2010 = dhshh_2010 %>%
   # removing incomplete surveys 
   filter(!is.na(capacity))%>%
   # 19996 obs. of 33 variables 
-  ungroup %>%
+ # ungroup %>%   # necessary? has the data been grouped before this?
   group_by(ta_id) %>%
   summarize(
     capacity_avg = mean(capacity),
@@ -223,15 +233,15 @@ ta = left_join(
   by = c("ID_2" = "ta_id")
 )
 
-# making capacity score resemble malcomb et al's work 
+# making capacity score resemble malcomb et al's work - assets and access weighted by 20%
 ta = mutate(ta, capacity_2010 = capacity_2010 * 20)
 # 256 features 
 
-# preparing breaks for mapping using natural jenks method
+# preparing breaks for mapping using natural jenks method - returns list of break points
 ta_brks = filter(ta, !is.na(capacity_2010)) %>% {classIntervals(.$capacity_2010, 4, style = "jenks")$brks}
-
+# rounds each capacity score
 ta_int = lapply(1:4, function(x) paste0(round(ta_brks[x],2)," - ", round(ta_brks[x +1],2))) %>% unlist()
-
+# groups capacity scores into discrete groups based on the break points in ta_brks
 ta = mutate(ta, capacity_2010_brks = case_when(
   capacity_2010 <= ta_brks[2] ~ ta_int[1],
   capacity_2010 <= ta_brks[3] ~ ta_int[2],
@@ -279,10 +289,10 @@ dr = st_warp(dr, blank, use_gdal = T, method = "bilinear")
 # use nearest neighbor for flood risk to preserve integer values
 fl = st_warp(fl, blank, method = "near")  
 
-# removing factors from fl
+# removing factors from fl - makes categorical flood data numeric
 nmrc = as.numeric(levels(fl[[1]]))[fl[[1]]]
 fl = blank
-fl[[1]][] = nmrc
+fl[[1]][] = nmrc  # bracket syntax gets at different raster bands/layers - we only have one to deal with
 ```
 
 ```{r rasterizing geometries}
@@ -295,7 +305,7 @@ ta_2010 = st_clip(st_transform(filter(ta, is.na(capacity_2010) == F), 3395), st_
   st_transform(4326)
 # 222 features 
 
-# making capacity rasters 
+# making capacity rasters from ta capacities
 ta_capacity = st_rasterize(ta_2010[, 'capacity_2010'], blank)
 #lhz_capacity = st_rasterize(lhz[,'capacity'], blank) 
 ```
@@ -304,16 +314,16 @@ ta_capacity = st_rasterize(ta_2010[, 'capacity_2010'], blank)
 vulnerability = function(geo) {
   # creating mask layer
   mask = geo 
-  mask[mask > 0] = 1
-  mask[mask == 0] = NA
+  mask[mask > 0] = 1   # this keeps points where we have a capacity score
+  mask[mask == 0] = NA  # sets points without a capacity score to no data
   
   # masking flood and drought 
   flood = fl * mask * 4
   drought = dr * mask
   
-  # reclassifying drought layer
+  # reclassifying drought layer - creates quintile breaks
   qt = quantile(drought[[1]], probs = seq(0, 1, 0.2), na.rm = T)
-  
+  # assigns cells to groups based on breaks calculated above
   drought = drought %>%
     mutate(
       recoded = case_when(
@@ -337,6 +347,7 @@ ta_2010$vuln = aggregate(ta_final,ta_2010,mean)$capacity_2010
 ```
 
 ```{r misc. map features}
+# adds lakes for cartography
 lakes = st_as_sf(read_csv(here(public_r, "major_lakes.csv"))[, c("name", "the_geom")],
                  wkt = "the_geom",
                  crs = 4326) %>%
@@ -345,6 +356,7 @@ lakes = st_as_sf(read_csv(here(public_r, "major_lakes.csv"))[, c("name", "the_ge
   st_sf %>%
   mutate(EA = "Major Lakes of Malawi")
 
+# creates a layer of national parks/reserves
 ea = lhz %>%
   st_transform(3395) %>%  #transform to world mercator (jh: not sure if we need to transform to 3395 and back here?)
   summarize %>%  
@@ -356,7 +368,7 @@ ea = lhz %>%
     grepl("Reserve", ta[["NAME_2"]]) | grepl("Park", ta[["NAME_2"]]) ~ "National Parks and Reserves",
     T ~ "Missing Data")   # search and replace names- anything with Reserve or Park in the name becomes National Parks and Reserves
   ) %>%
-  rbind(lakes) %>%
+  rbind(lakes) %>%  # combines with lakes to make one natural features layer
   st_make_valid()
 
 ```
