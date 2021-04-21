@@ -99,6 +99,14 @@ lhz = read_sf(here("data", "raw", "public", "livelihood_zones", "MW_LHZ_2009.shp
 # reading in FEWsnet Livelihood Zones Data
 lhz_data = read_csv(here("data", "derived", "private", "LivelihoodSensitivity.csv"))
 
+# NEW! changing name of "Name" column to match lhz dataset
+lhz_data = lhz_data %>%
+  mutate(LZNAMEEN = Name) %>%
+  select(LZNAMEEN, PctFoodFromOwnFarm, PctCashFromLabor, PctCashFromCrops)
+# NEW!
+lhz = lhz %>%
+  merge(lhz_data, by = "LZNAMEEN")
+
 # village points data
 dhsclusters_2010 = readRDS(here("data", "raw", "private", "datasets", "MWGE62FL.rds")) %>%
   as("sf") %>% 
@@ -107,9 +115,12 @@ dhsclusters_2010 = readRDS(here("data", "raw", "private", "datasets", "MWGE62FL.
   # allows us to know which ta every survey point belongs to so we can aggregate by attribute later
   # adds ta and lhz id info to village points
   st_join(st_transform(select(ta, ID_2),3395)) %>%
-  st_join(st_transform(select(lhz, FNID),3395)) %>%
+  st_join(st_transform(select(lhz, FNID, PctFoodFromOwnFarm, PctCashFromLabor, PctCashFromCrops),3395)) %>%
   rename(ta_id = ID_2,
          lhz_id = FNID,
+         food = PctFoodFromOwnFarm, # NEW!
+         labor = PctCashFromLabor, # NEW!
+         cashcrops = PctCashFromCrops, # NEW!
          urban_rural = URBAN_RURA)
 
 # household level survey responses - not spatial
