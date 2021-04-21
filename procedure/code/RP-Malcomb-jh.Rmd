@@ -80,6 +80,7 @@ set_rdhs_config(
 ```
 
 ```{r downloading dhs data}
+#ignore this because data is saved so we call on it specifically below
 dhs_downloads = get_datasets(
   c("MWHR61SV", "MWGE62FL", "MWHR4ESV", "MWGE4BFL"),
   all_lower = FALSE,
@@ -95,8 +96,11 @@ ta = read_sf(here("data", "raw", "public","traditional_authorities", "MWI_adm2.s
 
 lhz = read_sf(here("data", "raw", "public", "livelihood_zones", "MW_LHZ_2009.shp")) %>% st_make_valid()
 
+# reading in FEWsnet Livelihood Zones Data
+lhz_data = read_csv(here("data", "derived", "private", "LivelihoodSensitivity.csv"))
+
 # village points data
-dhsclusters_2010 = readRDS(dhs_downloads$MWGE62FL) %>%
+dhsclusters_2010 = readRDS(here("data", "raw", "private", "datasets", "MWGE62FL.rds")) %>%
   as("sf") %>% 
   st_transform(3395) %>%  # reproject 
   # joining id for traditional authorities and livelihood zones to dhs clusters
@@ -109,7 +113,7 @@ dhsclusters_2010 = readRDS(dhs_downloads$MWGE62FL) %>%
          urban_rural = URBAN_RURA)
 
 # household level survey responses - not spatial
-dhshh_2010 = readRDS(dhs_downloads$MWHR61SV) %>% zap_labels() 
+dhshh_2010 = readRDS(here("data", "raw", "private", "datasets", "MWHR61SV.rds")) %>% zap_labels() 
 ```
 
 ```{r households to remove (2010)}
