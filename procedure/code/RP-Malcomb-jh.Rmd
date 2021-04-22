@@ -295,9 +295,9 @@ ta = left_join(
 )
 
 # making capacity score resemble malcomb et al's work - assets and access weighted by 20%
-# ta = mutate(ta, capacity_2010 = capacity_2010 * 20)
+ ta = mutate(ta, capacity_2010 = capacity_2010 * 20)
 # same, but with the sensitivity added
-ta = mutate(ta, capacity_sensitivity = (capacity_2010 + sensitivity) * 20)
+#ta = mutate(ta, capacity_sensitivity = (capacity_2010 + sensitivity) * 20)
 # 256 features 
 
 # preparing breaks for mapping using natural jenks method - returns list of break points
@@ -311,6 +311,33 @@ ta = mutate(ta, capacity_2010_brks = case_when(
   capacity_2010 <= ta_brks[4] ~ ta_int[3],
   capacity_2010 >  ta_brks[4] ~ ta_int[4]
 ))
+```
+
+```{r normalizing livelihood zones}
+
+lhz_calc <- lhz %>%
+select(
+    PctFoodFromOwnFarm,
+    PctCashFromLabor,
+    PctCashFromCrops,
+    Disaster,
+    geometry
+  ) %>%
+  mutate(
+    foodscore = percent_rank(PctFoodFromOwnFarm) * 4 + 1,  # assuming greater reliance on one's own farm is worse?
+    laborscore = percent_rank(PctCashFromLabor) * 4 + 1, # assuming greater reliance on wages is worse for vulnerability?
+    cropscore = percent_rank(desc(PctCashFromCrops)) * 4 + 1, # assuming greater reliance on cash from crops leads to more vulnerability?
+    disasterscore = percent_rank(desc(Disaster)) * 4 +1
+  ) %>%
+  rowwise %>%
+  mutate(sensitivity = sum(
+    foodscore * 0.06,
+    laborscore * 0.06,
+    cropscore * 0.04,
+    disasterscore * 0.04,
+    na.rm = F
+  ))
+
 ```
 
 ```{r saving adaptive capacity scores}
@@ -364,17 +391,18 @@ st_clip = function(x,y) st_intersection(x, st_union(st_geometry(y)))
 
 st_agr(ta) = "constant"
 
-ta_2010 = st_clip(st_transform(filter(ta, is.na(capacity_sensitivity) == F), 3395), st_buffer(st_transform(lhz, 3395), .01)) %>%
+ta_2010 = st_clip(st_transform(filter(ta, is.na(capacity_2010) == F), 3395), st_buffer(st_transform(lhz, 3395), .01)) %>%
   st_transform(4326)
 # 222 features 
 
 # making capacity rasters from ta capacities
-ta_capacity = st_rasterize(ta_2010[, 'capacity_sensitivity'], blank)
-#lhz_capacity = st_rasterize(lhz[,'capacity'], blank) 
+ta_capacity = st_rasterize(ta_2010[, 'capacity_2010'], blank)
+
+lhz_capacity = st_rasterize(lhz_calc[,'sensitivity'], blank) 
 ```
 
 ```{r function to calculate vulnerability}
-vulnerability = function(geo) {
+vulnerability = function(geo, lhz_raster) {
   # creating mask layer
   mask = geo 
   mask[mask > 0] = 1   # this keeps points where we have a capacity score
@@ -399,12 +427,12 @@ vulnerability = function(geo) {
     ) %>% select(recoded) * 4
   
   # final output (adding component rasters)
-  final = (60 - geo) * 0.60 + drought * 0.20 + flood * 0.20
+  final = (40 - geo) * 0.40 + (20 - 20 * lhz_raster) * 0.20 + drought * 0.20 + flood * 0.20
 }
 ```
 
 ```{r creating final vulnerability layers}
-ta_final = vulnerability(ta_capacity)
+ta_final = vulnerability(ta_capacity, lhz_capacity)
 
 #ta_2010$vuln = aggregate(ta_final,ta_2010,mean)$capacity_2010
 
@@ -423,7 +451,7 @@ lakes = st_as_sf(read_csv(here(public_r, "major_lakes.csv"))[, c("name", "the_ge
   mutate(EA = "Major Lakes of Malawi")
 
 # creates a layer of national parks/reserves
-ea = lhz %>%
+ea = ta %>%
   st_transform(3395) %>%  #transform to world mercator (jh: not sure if we need to transform to 3395 and back here?)
   summarize %>%  
   st_geometry %>%  #dissolve to one feature / one geometry
@@ -486,11 +514,11 @@ vuln_map = ggplot() +
   scale_fill_gradient(
     low = "#FFFF75",
     high = "#CF4611",
-    breaks = c(9.968335,  17.99652),
+    breaks = c(17.39,  25.21),
     labels = c("Lower Vulnerability", "Higher Vulnerability"),
     na.value = "transparent",
     guide = "colourbar",
-    limits = c(9.968335,  17.99652)
+    limits = c(17.39,  25.21)
   ) +
   scale_x_continuous(breaks = c(33,34,35,36)) +
   labs(title = "Malawi Vulnerability to Climate Change") +
