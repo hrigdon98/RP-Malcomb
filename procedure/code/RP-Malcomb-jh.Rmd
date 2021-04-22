@@ -369,7 +369,7 @@ ta_2010 = st_clip(st_transform(filter(ta, is.na(capacity_sensitivity) == F), 339
 # 222 features 
 
 # making capacity rasters from ta capacities
-ta_capacity = st_rasterize(ta_2010[, 'capacity_2010'], blank)
+ta_capacity = st_rasterize(ta_2010[, 'capacity_sensitivity'], blank)
 #lhz_capacity = st_rasterize(lhz[,'capacity'], blank) 
 ```
 
@@ -406,7 +406,10 @@ vulnerability = function(geo) {
 ```{r creating final vulnerability layers}
 ta_final = vulnerability(ta_capacity)
 
-ta_2010$vuln = aggregate(ta_final,ta_2010,mean)$capacity_2010
+#ta_2010$vuln = aggregate(ta_final,ta_2010,mean)$capacity_2010
+
+#????
+ta_2010$vuln2 = aggregate(ta_final,ta_2010,mean)$capacity_sensitivity
 ```
 
 ```{r misc. map features}
