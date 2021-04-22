@@ -102,7 +102,7 @@ lhz_data = read_csv(here("data", "derived", "private", "LivelihoodSensitivity.cs
 # NEW! changing name of "Name" column to match lhz dataset
 lhz_data = lhz_data %>%
   mutate(LZNAMEEN = Name) %>%
-  select(LZNAMEEN, PctFoodFromOwnFarm, PctCashFromLabor, PctCashFromCrops)
+  select(LZNAMEEN, PctFoodFromOwnFarm, PctCashFromLabor, PctCashFromCrops, Disaster)
 # NEW!
 lhz = lhz %>%
   merge(lhz_data, by = "LZNAMEEN")
@@ -115,12 +115,12 @@ dhsclusters_2010 = readRDS(here("data", "raw", "private", "datasets", "MWGE62FL.
   # allows us to know which ta every survey point belongs to so we can aggregate by attribute later
   # adds ta and lhz id info to village points
   st_join(st_transform(select(ta, ID_2),3395)) %>%
-  st_join(st_transform(select(lhz, FNID, PctFoodFromOwnFarm, PctCashFromLabor, PctCashFromCrops),3395)) %>%
+  # NEW!
+  st_join(st_transform(select(lhz, FNID, PctFoodFromOwnFarm, PctCashFromLabor, PctCashFromCrops, Disaster),3395)) %>%
   rename(ta_id = ID_2,
          lhz_id = FNID,
-         food = PctFoodFromOwnFarm, # NEW!
-         labor = PctCashFromLabor, # NEW!
-         cashcrops = PctCashFromCrops, # NEW!
+         # NEW!
+         food = PctFoodFromOwnFarm, labor = PctCashFromLabor, cashcrops = PctCashFromCrops, disaster = Disaster,
          urban_rural = URBAN_RURA)
 
 # household level survey responses - not spatial
@@ -243,27 +243,29 @@ ta_capacity_2010 = dhshh_2010 %>%
 ```{r processing livelihood zones data}
 # NEW!
 lhz_sensitivity <- dhshh_2010 %>%
-  left_join(st_drop_geometry(select(dhsclusters_2010, DHSCLUST, ta_id, food, labor, cashcrops)), by = c("HV001" = "DHSCLUST")) %>%
+  left_join(st_drop_geometry(select(dhsclusters_2010, DHSCLUST, ta_id, food, labor, cashcrops, disaster)), by = c("HV001" = "DHSCLUST")) %>%
   select(
     HHID,
     ta_id,
     food,
     labor,
-    cashcrops
+    cashcrops,
+    disaster
   ) %>%
   filter(!HHID %in% rmv_2010) %>%    #24640 obs, 5 vars
   filter(!is.na(ta_id)) %>%          #24030 obs, vars
   mutate(
     foodscore = percent_rank(desc(food)) * 4 + 1,  # assuming greater reliance on one's own farm is worse?
     laborscore = percent_rank(desc(labor)) * 4 + 1, # assuming greater reliance on wages is worse for vulnerability?
-    cropscore = percent_rank(desc(cashcrops)) * 4 + 1 # assuming greater reliance on cash from crops leads to more vulnerability?
+    cropscore = percent_rank(desc(cashcrops)) * 4 + 1, # assuming greater reliance on cash from crops leads to more vulnerability?
+    disasterscore = percent_rank(disaster) * 4 +1
   ) %>%
   rowwise %>%
   mutate(sensitivity = sum(
     foodscore * 0.06,
     laborscore * 0.06,
     cropscore * 0.04,
-    # copingscore * 0.04,
+    disasterscore * 0.04,
     na.rm = F
   )) %>%
     filter(!is.na(sensitivity))%>%
@@ -275,6 +277,7 @@ lhz_sensitivity <- dhshh_2010 %>%
     sensitivity_sd = sd(sensitivity)
   )
 ```
+
 
 ```{r joining 2010 capacity to ta and creating breaks for visualization}
 # join mean capacity to traditional authorities
