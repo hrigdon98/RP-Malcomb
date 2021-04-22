@@ -255,10 +255,10 @@ lhz_sensitivity <- dhshh_2010 %>%
   filter(!HHID %in% rmv_2010) %>%    #24640 obs, 5 vars
   filter(!is.na(ta_id)) %>%          #24030 obs, vars
   mutate(
-    foodscore = percent_rank(desc(food)) * 4 + 1,  # assuming greater reliance on one's own farm is worse?
-    laborscore = percent_rank(desc(labor)) * 4 + 1, # assuming greater reliance on wages is worse for vulnerability?
+    foodscore = percent_rank(food) * 4 + 1,  # assuming greater reliance on one's own farm is worse?
+    laborscore = percent_rank(labor) * 4 + 1, # assuming greater reliance on wages is worse for vulnerability?
     cropscore = percent_rank(desc(cashcrops)) * 4 + 1, # assuming greater reliance on cash from crops leads to more vulnerability?
-    disasterscore = percent_rank(disaster) * 4 +1
+    disasterscore = percent_rank(desc(disaster)) * 4 +1
   ) %>%
   rowwise %>%
   mutate(sensitivity = sum(
