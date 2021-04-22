@@ -280,6 +280,7 @@ lhz_sensitivity <- dhshh_2010 %>%
 
 
 ```{r joining 2010 capacity to ta and creating breaks for visualization}
+
 # join mean capacity to traditional authorities
 ta = left_join(
   ta,
@@ -287,8 +288,16 @@ ta = left_join(
   by = c("ID_2" = "ta_id")
 )
 
+ta = left_join(
+  ta,
+  select(lhz_sensitivity, ta_id, sensitivity = sensitivity_avg),
+  by = c("ID_2" = "ta_id")
+)
+
 # making capacity score resemble malcomb et al's work - assets and access weighted by 20%
-ta = mutate(ta, capacity_2010 = capacity_2010 * 20)
+# ta = mutate(ta, capacity_2010 = capacity_2010 * 20)
+# same, but with the sensitivity added
+ta = mutate(ta, capacity_sensitivity = (capacity_2010 + sensitivity) * 20)
 # 256 features 
 
 # preparing breaks for mapping using natural jenks method - returns list of break points
@@ -355,7 +364,7 @@ st_clip = function(x,y) st_intersection(x, st_union(st_geometry(y)))
 
 st_agr(ta) = "constant"
 
-ta_2010 = st_clip(st_transform(filter(ta, is.na(capacity_2010) == F), 3395), st_buffer(st_transform(lhz, 3395), .01)) %>%
+ta_2010 = st_clip(st_transform(filter(ta, is.na(capacity_sensitivity) == F), 3395), st_buffer(st_transform(lhz, 3395), .01)) %>%
   st_transform(4326)
 # 222 features 
 
@@ -390,7 +399,7 @@ vulnerability = function(geo) {
     ) %>% select(recoded) * 4
   
   # final output (adding component rasters)
-  final = (40 - geo) * 0.40 + drought * 0.20 + flood * 0.20
+  final = (60 - geo) * 0.60 + drought * 0.20 + flood * 0.20
 }
 ```
 
