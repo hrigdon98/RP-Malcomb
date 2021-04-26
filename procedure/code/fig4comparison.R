@@ -113,7 +113,7 @@ map3 =ggplot() +
     color = "white",
     lwd = .2
   ) + 
-  scale_fill_manual(name = "legend title",
+  scale_fill_manual("Legend",
                     limits = c("-2","-1","0","1","2","Missing Data","Major Lakes of Malawi","National Parks and Reserves"), 
                     labels = c(
                       "-2" = "Two Intervals Lower",
@@ -128,6 +128,5 @@ map3 =ggplot() +
                     values = c("-2"="#e66101","-1"="#fdb863","0"="#cccccc","1"="#b2abd2","2"="#5e3c99","Missing Data"="#000000","Major Lakes of Malawi"="lightblue","National Parks and Reserves"="#D9EABB"))+
   scale_x_continuous(breaks = c(33,34,35,36)) +
   labs(title = "Comparing Adaptive Capacity Results", subtitle = "Original Study vs. Reproduction") +
-  theme_minimal() +
-  theme(legend.title = element_blank())
+  theme_minimal()
 map3
