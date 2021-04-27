@@ -72,4 +72,6 @@ vuln_diff = ggplot() +
 
 vuln_diff
 
+library(raster)
+library(rgdal)
 
