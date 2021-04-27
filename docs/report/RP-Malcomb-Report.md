@@ -12,10 +12,10 @@ Original study *by* Malcomb, D. W., E. A. Weaver, and A. R. Krakowka. 2014. Vuln
 Replication Authors:
 Your Name, Joseph Holler, Kufre Udoh, Open Source GIScience students of fall 2019 and Spring 2021
 
-Replication Materials Available at: [github repository name](github repository link)
+Replication Materials Available [here](https://github.com/emmab725/RP-Malcomb).
 
-Created: `DD Month YYYY`
-Revised: `DD Month YYYY`
+Created: `14 April 2021`
+Revised: `26 April 2021`
 
 ## Abstract
 
@@ -30,18 +30,18 @@ The original study was published without data or code, but has detailed narrativ
 
 ### Data Description and Variables
 
-#### Demographic and Health Surveys
+#### [Demographic and Health Surveys](https://dhsprogram.com/Data/)
 
 Demographic and Health Surveys data are used to quantify average household assets and access to resources.
 
-The DHS dataset was collected by the US Agency for International Development (USAID) as part of their Demographics and Health Surveys program, which are designed to be nationally representative population-based surveys. This analysis used the table information from individual household survey responses as well as geographically randomized survey cluster points (Perez-Heydrich et al. 2013). The datasets used in this analysis were collected in 2004 and 2010 and are based on over 38,500 survey responses (Malcomb et al. 2014). The household survey questionnaire is standardized across all countries and regions where the survey is performed and is designed to be applicable and comparable across countries. Individual countries may add questions or supplemental questionnaires to tailor the surveys to local needs, but the model surveys remain the same and are designed by USAID ("Data Collection").
+The DHS dataset was collected by the US Agency for International Development (USAID) as part of their Demographics and Health Surveys program, which are designed to be nationally representative population-based surveys. This analysis used the table information from individual household survey responses as well as geographically randomized survey cluster points ([Perez-Heydrich et al. 2013](https://github.com/emmab725/RP-Malcomb/blob/main/data/metadata/Guidelines%20on%20the%20use%20of%20DHS%20GPS%20data.pdf)). The datasets used in this analysis were collected in 2004 and 2010 and are based on over 38,500 survey responses (Malcomb et al. 2014). The household survey questionnaire is standardized across all countries and regions where the survey is performed and is designed to be applicable and comparable across countries. Individual countries may add questions or supplemental questionnaires to tailor the surveys to local needs, but the model surveys remain the same and are designed by USAID ("Data Collection").
 
-The original study constructs 10 indicators from 14 survey variables in order to assess each household’s financial and social assets as well as access to markets, information, and resources (Malcomb et al. 2014). These indicators measure financial assets such as livestock, land ownership, money, and access to technology and information, as well as demographic information such as household gender and age composition, health status, and market access/location. A full list of indicators used is available <here> (make this a thing at some point)
+The original study constructs 10 indicators from 14 survey variables in order to assess each household’s financial and social assets as well as access to markets, information, and resources (Malcomb et al. 2014). These indicators measure financial assets such as livestock, land ownership, money, and access to technology and information, as well as demographic information such as household gender and age composition, health status, and market access/location. A full list of indicators used is available <here> (make this a thing at some point).
 
 The survey cluster points were aggregated from the village level into 250 traditional authorities to allow for a more detailed and meaningful analysis (Malcomb et al. 2014).
 
 
-#### FEWSnet Livelihood Sensitivity
+#### [FEWSnet Livelihood Sensitivity](https://fews.net/fews-data/335)
 
 FEWSnet data are used to assess livelihood sensitivity for 19 livelihood zones.
 
@@ -50,7 +50,7 @@ The livelihood zones data incorporated in this analysis comes from interviews wi
 The vector dataset of livelihood zones were created in 2003 by updating a previous food economy zone map made by Save the Children in 1996. The updates to the livelihood zones were based on secondary source material, a national workshop with members of the Malawi Vulnerability Assessment Committee, and interviews at the district level with key personnel. When thinking about the different livelihood zones, it is important to remember that they are not constant, but influenced by seasonality and livelihoods are often affected by seasonality and variation.
 
 
-#### UNEP/GRID Flood and Drought Exposure
+#### UNEP/GRID [Flood](https://github.com/emmab725/RP-Malcomb/blob/main/data/raw/public/fl1010irmt.tif) and [Drought](https://github.com/emmab725/RP-Malcomb/blob/main/data/raw/public/dr1010ipeykx.tif) Exposure
 
 The UNEP Grid dataset is a set of two publicly available raster layers that was used in this lab to determine population exposure values to drought events and flood hazard. Both data layers were initially developed by UNEP/GRID-Europe for the Global Assessment Report of Risk Reduction. The data layer for physical exposure to drought events was developed based on three other sources: global monthly precipitation data, a GIS model of standardized precipitation, and a grid layer of global population. This layer reflects estimated physical exposure to drought for the temporal window between 1980 and 2001. The flood risk raster layer reflects estimated risk on an index scale between 1 (low) and 5 (extreme).
 
@@ -59,11 +59,11 @@ Within the r script, the raster layers are transformed and resampled to reflect 
 
 #### Traditional Authorities Boundaries
 
-The Traditional Authorities (TA) data is a vector layer from the Database for Global Administrative Areas (GADM). The data is from 2010, and was extracted from the database (www.gadm.org), version 2.8, November 2015. Its use is restricted to non-commercial purposes. The license states “It is not allowed to redistribute these data, or use them for commercial purposes, without prior consent.” Traditional Authorities are one level below the district level in Malawi, and offer the lowest level of “meaningful administrative power” (Malcomb 22). Because the TAs are the scale at which the analysis is conducted, the data itself is not transformed, however, the DHS data was aggregated to this scale.
+The Traditional Authorities (TA) data is a vector layer from the Database for Global Administrative Areas (GADM). The data is from 2010, and was extracted from the [database](www.gadm.org), version 2.8, November 2015. Its use is restricted to non-commercial purposes. The license states “It is not allowed to redistribute these data, or use them for commercial purposes, without prior consent.” Traditional Authorities are one level below the district level in Malawi, and offer the lowest level of “meaningful administrative power” (Malcomb et al. 2014). Because the TAs are the scale at which the analysis is conducted, the data itself is not transformed, however, the DHS data was aggregated to this scale.
 In the R script, it is reprojected in order to match the CRS of other spatial data layers.
 
 
-#### Major Lakes
+#### [Major Lakes](https://github.com/emmab725/RP-Malcomb/blob/main/data/raw/public/major_lakes.csv)
 
 The major lakes dataset is a vector layer downloaded from the Malawi Spatial Data Platform. This dataset uses Open Street Maps data and the Overpass Turbo API to filter out OSM polygons according to the expression “water = lake.” The dataset was last updated in 2017.
 
