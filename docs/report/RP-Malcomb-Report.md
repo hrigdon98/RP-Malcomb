@@ -118,7 +118,7 @@ The replication study will use R.
 
 Our reproduction supports Malcomb et al.’s assessment of adaptive capacity at the Traditional Authority level (Figure 4 in the paper). A difference map (fig. 3) shows general agreement between our adaptive capacity map (fig. 1) and a digitized version of the adaptive capacity map presented by Malcomb et al., with most regions in our reproduction matching or being within one class break of the original value. A confusion matrix comparing the two maps (fig. 5) yielded a Spearman’s rho value of 0.77, indicating a relatively strong correlation between the original study and our reproduction.
 
-We failed to reproduce the original study’s assessment of climate vulnerability (Figure 5 in the paper). There was broad disagreement between our reproduction (fig. 2) and a digitized version of the original study’s map of climate vulnerability, as shown in a map of the difference between the original study and reproduction (fig. 4).  A confusion matrix comparing the two maps yielded a Spearman’s rho value of 0.15, indicating a very low degree of correlation between the original study and our reproduction. As shown in a scatterplot of vulnerability scores from the original study vs. the reproduction (fig. 6), the reproduction consistently yielded lower vulnerability scores, falling below the line of equality.
+We failed to reproduce the original study’s assessment of climate vulnerability (Figure 5 in the paper). There was broad disagreement between our reproduction (fig. 2) and a digitized version of the original study’s map of climate vulnerability, as shown in a map of the difference between the original study and reproduction (fig. 4).  A confusion matrix comparing the two maps yielded a Spearman’s rho value of 0.15, indicating a very low degree of correlation between the original study and our reproduction. As shown in a scatterplot of vulnerability scores from the original study vs. the reproduction (fig. 6), the reproduction consistently yielded lower vulnerability scores, falling below the line of equality. Prior to comparison, the vulnerability values were scaled from 0 to 1 over the range, from minimum to maximum. As we can see in fig. 6, vulnerability scores in the original study were clustered between 0.5 and 0.9, on the high end of the range, while vulnerability scores in the reproduction were mostly distributed lower in the range, from 0.1 to 0.7. Thus, the skewness of the two distributions of vulnerability scores might explain why the reproduction was almost always lower.
 
 
 ![Adaptive Capacity by TA – Reproduction Results](/assets/ac_2010.png)
@@ -183,10 +183,14 @@ The research findings suggest a need for further exploration of climate change v
 
 The mapping of vulnerability, or any data that reflects the unequal distribution of risk across space, is crucial for considering where support should be directed. Future research, however, should also work to account for vulnerability at different scales, and new time periods. The results and implications of the current vulnerability maps produced by Malcomb et al. are important starting points for considering spatial variation in vulnerabilities, however they reflect data from a poorly defined time period, and new temporal data will continue to strengthen the models. And while quantitative models such as this one are crucial for identifying areas of risk, the aggregation of data into villages, traditional authorities, or livelihood zones must be viewed as an average result, as it does not account for the various unique vulnerabilities that individual households may face.
 
+&ensp;
+
 
 ## References
 
-Include any referenced studies or materials in the [AAG Style of author-date referencing](https://www.tandf.co.uk//journals/authors/style/reference/tf_USChicagoB.pdf).
+Malcomb, D. W., E. A. Weaver, and A. R. Krakowka. 2014. Vulnerability modeling for sub-Saharan Africa: An operationalized approach in Malawi. Applied Geography 48:17–30. DOI:[10.1016/j.apgeog.2014.01.004](https://doi.org/10.1016/j.apgeog.2014.01.004)
+
+
 
 ####  Report Template References & License
 
