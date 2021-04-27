@@ -686,7 +686,41 @@ ggsave(
 
 ```{r}
 #difference results for figure 5
+vuln_diff = ggplot() +
+  geom_sf(data = ea,
+          fill = clrs,
+          color = NA) +
+  geom_stars(data = fig5comp["diff"]) +
+  scale_fill_gradient2(
+    midpoint = 0,
+    low = "blue",
+    mid = "white",
+    high = "red",
+    space = "Lab",
+    breaks = c(-1,  1),
+    labels = c("Reproduction Vulnerability Lower", "Reproduction Vulnerability Higher"),
+    na.value = "transparent",
+    guide = "colourbar",
+    limits = c(-1,  1)
+  ) +
+  scale_x_continuous(breaks = c(33,34,35,36)) +
+  labs(title = "Comparing Vulnerability Results", subtitle = "Original Study vs. Reproduction") +
+  theme_minimal() +
+  theme(
+    legend.title = element_blank(),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank()
+  )
 
+vuln_diff
+
+ggsave(
+  here("results","maps","vuln_difference.png"),
+  plot = vuln_diff,
+  width = 8.5,
+  height = 11,
+  units = "in"
+)
 ```
 
 

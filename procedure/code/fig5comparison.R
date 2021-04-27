@@ -43,3 +43,33 @@ cor.test(fig5comppts$or, fig5comppts$rp, method="spearman")
 
 # Hint for mapping raster results: refer to the diff raster attribute
 # in the fig5comp stars object like this: fig5comp["diff"]
+
+vuln_diff = ggplot() +
+  geom_sf(data = ea,
+          fill = clrs,
+          color = NA) +
+  geom_stars(data = fig5comp["diff"]) +
+  scale_fill_gradient2(
+    midpoint = 0,
+    low = "blue",
+    mid = "white",
+    high = "red",
+    space = "Lab",
+    breaks = c(-1,  1),
+    labels = c("Reproduction Vulnerability Lower", "Reproduction Vulnerability Higher"),
+    na.value = "transparent",
+    guide = "colourbar",
+    limits = c(-1,  1)
+  ) +
+  scale_x_continuous(breaks = c(33,34,35,36)) +
+  labs(title = "Comparing Vulnerability Results", subtitle = "Original Study vs. Reproduction") +
+  theme_minimal() +
+  theme(
+    legend.title = element_blank(),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank()
+  )
+
+vuln_diff
+
+
