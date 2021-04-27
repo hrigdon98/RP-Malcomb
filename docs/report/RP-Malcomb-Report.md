@@ -178,6 +178,8 @@ As discussed above, our reliance on the authors’ ambiguous narrative descripti
 
 Additionally, the original authors’ presentation of the FEWSNET livelihood zones at best overestimates and at worst misrepresents the actual content and reliability of that data. They refer to the livelihoods zones data as a “countrywide survey” (pg. 21) and weight the indicators derived from it similarly to those derived from DHS data, but the livelihood zones data are not derived from surveys in the same way that the DHS data are (Malcomb et al. 2014). The FEWSNET data were created from focus group consultations in four villages and two districts in each zone, which were selected based on interviews with district-level government officials and NGOs (“Guidance Notes for Livelihood Zones” 2005). Put simply, these data were constructed from a small, normative sample of the population of a small, normative sample of the villages within each livelihood zone. While the organization into non-administrative livelihoods zones may be accurate and this data may have important applications, using it as a vital input to a fine-resolution assessment of climate vulnerability seems to grant it more credibility and geographic specificity than it deserves.
 
+Furthermore, it was sometimes unclear how the authors used the FEWSNET data on livelihood zones, because they included relatively little discussion of the variables in question – percent of food from one’s own farm, percent of income from wage labor, and percent of income from cash crops. A careful reading of the paper suggests that Malcomb et al. frame the first two as positive and the third as negative, but there is some uncertainty here, and our reproduction may have reversed the direction of one of these variables, explaining some of the divergence between the reproduction results and the original study.
+
 
 ## Conclusion
 
@@ -192,9 +194,13 @@ The mapping of vulnerability, or any data that reflects the unequal distribution
 
 ## References
 
+Longley, Paul, ed. 2005. Geographical Information Systems and Science. 2nd ed. Chichester ; Hoboken, NJ: Wiley.
+
 Malcomb, D. W., E. A. Weaver, and A. R. Krakowka. 2014. Vulnerability modeling for sub-Saharan Africa: An operationalized approach in Malawi. Applied Geography 48:17–30. DOI:[10.1016/j.apgeog.2014.01.004](https://doi.org/10.1016/j.apgeog.2014.01.004)
 
+Pelling, Mark. 2011. Adaptation to Climate Change: From Resilience to Transformation. London ; New York: Routledge.
 
+Tate, E. 2013. Uncertainty Analysis for a Social Vulnerability Index. Annals of the Association of American Geographers 103 (3):526–543. doi:[10.1080/00045608.2012.700616](https://doi.org/10.1080/00045608.2012.700616).
 
 ####  Report Template References & License
 
