@@ -141,6 +141,12 @@ We failed to reproduce the original study’s assessment of climate vulnerabilit
 
 &ensp;
 
+![Confusion Matrix – Adaptive Capacity Reproduction](/assets/confusion matrix.png)
+
+**Figure 5.** Confusion matrix comparing the Malcomb et al. (2014) results to the reproduction; note that the reproduction often yielded lower adaptive capacity scores than the original study, but the reproduction results for each TA were generally within one interval of the original study's results.
+
+&ensp;
+
 ## Unplanned Deviations from the Protocol
 
 Summarize changes and uncertainties between
