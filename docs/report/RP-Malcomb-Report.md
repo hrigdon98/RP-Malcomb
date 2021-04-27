@@ -10,12 +10,12 @@ title: RP- Vulnerability modeling for sub-Saharan Africa
 Original study *by* Malcomb, D. W., E. A. Weaver, and A. R. Krakowka. 2014. Vulnerability modeling for sub-Saharan Africa: An operationalized approach in Malawi. *Applied Geography* 48:17–30. DOI:[10.1016/j.apgeog.2014.01.004](https://doi.org/10.1016/j.apgeog.2014.01.004)
 
 Replication Authors:
-Your Name, Joseph Holler, Kufre Udoh, Open Source GIScience students of fall 2019 and Spring 2021
+Emma Brown, Brooke Laird, Sam Marshall, Hannah Rigdon, Vincent Falardeau, Joseph Holler, Kufre Udoh, Open Source GIScience students of Fall 2019 and Spring 2021
 
 Replication Materials Available [here](https://github.com/emmab725/RP-Malcomb).
 
 Created: `14 April 2021`
-Revised: `26 April 2021`
+Revised: `27 April 2021`
 
 ## Abstract
 
@@ -36,7 +36,7 @@ Demographic and Health Surveys data are used to quantify average household asset
 
 The DHS dataset was collected by the US Agency for International Development (USAID) as part of their Demographics and Health Surveys program, which are designed to be nationally representative population-based surveys. This analysis used the table information from individual household survey responses as well as geographically randomized survey cluster points ([Perez-Heydrich et al. 2013](https://github.com/emmab725/RP-Malcomb/blob/main/data/metadata/Guidelines%20on%20the%20use%20of%20DHS%20GPS%20data.pdf)). The datasets used in this analysis were collected in 2004 and 2010 and are based on over 38,500 survey responses (Malcomb et al. 2014). The household survey questionnaire is standardized across all countries and regions where the survey is performed and is designed to be applicable and comparable across countries. Individual countries may add questions or supplemental questionnaires to tailor the surveys to local needs, but the model surveys remain the same and are designed by USAID ("Data Collection").
 
-The original study constructs 10 indicators from 14 survey variables in order to assess each household’s financial and social assets as well as access to markets, information, and resources (Malcomb et al. 2014). These indicators measure financial assets such as livestock, land ownership, money, and access to technology and information, as well as demographic information such as household gender and age composition, health status, and market access/location. A full list of indicators used is available <here> (make this a thing at some point).
+The original study constructs 10 indicators from 14 survey variables in order to assess each household’s financial and social assets as well as access to markets, information, and resources (Malcomb et al. 2014). These indicators measure financial assets such as livestock, land ownership, money, and access to technology and information, as well as demographic information such as household gender and age composition, health status, and market access/location. A full list of indicators used is available [here](https://github.com/emmab725/RP-Malcomb/blob/main/data/metadata/dhs-indicators-used.xlsx).
 
 The survey cluster points were aggregated from the village level into 250 traditional authorities to allow for a more detailed and meaningful analysis (Malcomb et al. 2014).
 
@@ -75,8 +75,8 @@ The replication study will use R.
 
 ## Materials and Procedure
 
-## Original Workflow
-### Data:
+### Original Workflow
+#### 1. Data:
 
 - UNEP/GRID (raster)
   - Precipitation
@@ -87,7 +87,7 @@ The replication study will use R.
 - Famine Early Warning Network
   - Livelihood sensitivity
 
-### Steps:
+#### 2. Planned Steps:
 
 1. **DHS data**: Aggregate data from village level to TA (traditional authority) level
 2. **All data**: Rasterize
@@ -99,7 +99,7 @@ The replication study will use R.
 5. Calculate Resilience - raster calculator
    1. Household Resilience = Adaptive Capacity + Livelihood Sensitivity - Physical Exposure
 
-### Results:
+#### 3. Expected Results:
 
 - Maps of average resilience score for 2004 and for 2010 (socioeconomic resilience of households) at TA level
   - Mapped with 4 classes using natural breaks
@@ -112,12 +112,15 @@ The replication study will use R.
 
 ## Replication Results
 
-For each output from the original study (mainly figure 4 and figure 5), present separately the results of the replication attempt.
+Our reproduction supports Malcomb et al.’s assessment of adaptive capacity at the Traditional Authority level (fig. xx). A difference map (fig. xx) shows general agreement between our adaptive capacity map (fig. xx) and a digitized version of the adaptive capacity map presented by Malcomb et al. (fig. xx), with most regions in our reproduction matching or being within one class break of the original value. A confusion matrix comparing the two maps (fig. xx) yielded a Spearman’s rho value of 0.77, indicating a relatively strong correlation between the original study and our reproduction.
 
-2.	State whether the original study was or was not supported by the replication
-3.	State whether any hypothesis linked to a planned deviation from the original study was supported. Provide key statistics and related reasoning.
+We failed to reproduce the original study’s assessment of climate vulnerability (fig. xx). There was broad disagreement between our reproduction (fig. xx) and a digitized version of the original study’s map of climate vulnerability (fig. xx), as shown in figure xx.  A confusion matrix comparing the two maps (fig. xx) yielded a Spearman’s rho value of 0.15, indicating a very low degree of correlation between the original study and our reproduction. As shown in a map of the difference between the original study and our reproduction (fig. xx), the reproduction consistently yielded lower vulnerability scores.
+
 
 Figures to Include:
+
+![Adaptive Capacity by TA – Reproduction](/assets/ac_2010.png)
+
 - map of resilience by traditional authority in 2010, analagous to figure 4 of the original study
 - map of vulnerability in Malawi, analagous to figure 5 of the original study
 - map of difference between your figure 4 and the original figure 4
