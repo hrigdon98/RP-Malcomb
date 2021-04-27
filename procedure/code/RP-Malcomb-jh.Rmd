@@ -716,7 +716,7 @@ vuln_diff
 
 ggsave(
   here("results","maps","vuln_difference.png"),
-  plot = map3,
+  plot = vuln_diff,
   width = 8.5,
   height = 11,
   units = "in"
