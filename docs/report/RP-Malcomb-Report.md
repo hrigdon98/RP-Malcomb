@@ -117,14 +117,29 @@ Our reproduction supports Malcomb et al.’s assessment of adaptive capacity at 
 We failed to reproduce the original study’s assessment of climate vulnerability (fig. xx). There was broad disagreement between our reproduction (fig. xx) and a digitized version of the original study’s map of climate vulnerability (fig. xx), as shown in figure xx.  A confusion matrix comparing the two maps (fig. xx) yielded a Spearman’s rho value of 0.15, indicating a very low degree of correlation between the original study and our reproduction. As shown in a map of the difference between the original study and our reproduction (fig. xx), the reproduction consistently yielded lower vulnerability scores.
 
 
-Figures to Include:
+![Adaptive Capacity by TA – Reproduction Results](/assets/ac_2010.png)
 
-![Adaptive Capacity by TA – Reproduction](/assets/ac_2010.png)
+**Figure 1.** Reproduction results for adaptive capacity by traditional authority (TA), as calculated in R.
 
-- map of resilience by traditional authority in 2010, analagous to figure 4 of the original study
-- map of vulnerability in Malawi, analagous to figure 5 of the original study
-- map of difference between your figure 4 and the original figure 4
-- map of difference between your figure 5 and the original figure 5
+&ensp;
+
+![Malawi Vulnerability – Reproduction Results](/assets/vulnerability.png)
+
+**Figure 2.** Reproduction results for vulnerability in Malawi, as calculated in R.
+
+&ensp;
+
+![Adaptive Capacity Difference – Original Study vs. Reproduction](/assets/ac_difference.png)
+
+**Figure 3.** Map of the difference between the adaptive capacity of the reproduction vs. the original study.
+
+ &ensp;
+
+![Vulnerability Difference – Original Study vs. Reproduction](/assets/vuln_difference.png)
+
+**Figure 4.** Map of the difference between the vulnerability calculated in the reproduction vs. the original study.
+
+&ensp;
 
 ## Unplanned Deviations from the Protocol
 
