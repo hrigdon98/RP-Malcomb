@@ -108,13 +108,17 @@ The replication study will use R.
   - Raster
   - Derived from the all of the data sources combined
 
+### Updated Workflow
 
+![Updated Reproduction Workflow](/assets/Workflow.png)
+
+~~ An updated workflow diagram for the reproduction of Malcomb et al. (2014). Each step of this workflow diagram represents a chunk of code in R.
 
 ## Replication Results
 
-Our reproduction supports Malcomb et al.’s assessment of adaptive capacity at the Traditional Authority level (fig. xx). A difference map (fig. xx) shows general agreement between our adaptive capacity map (fig. xx) and a digitized version of the adaptive capacity map presented by Malcomb et al. (fig. xx), with most regions in our reproduction matching or being within one class break of the original value. A confusion matrix comparing the two maps (fig. xx) yielded a Spearman’s rho value of 0.77, indicating a relatively strong correlation between the original study and our reproduction.
+Our reproduction supports Malcomb et al.’s assessment of adaptive capacity at the Traditional Authority level (fig. xx). A difference map (fig. 3) shows general agreement between our adaptive capacity map (fig. 1) and a digitized version of the adaptive capacity map presented by Malcomb et al. (fig. xx), with most regions in our reproduction matching or being within one class break of the original value. A confusion matrix comparing the two maps (fig. 5) yielded a Spearman’s rho value of 0.77, indicating a relatively strong correlation between the original study and our reproduction.
 
-We failed to reproduce the original study’s assessment of climate vulnerability (fig. xx). There was broad disagreement between our reproduction (fig. xx) and a digitized version of the original study’s map of climate vulnerability (fig. xx), as shown in figure xx.  A confusion matrix comparing the two maps (fig. xx) yielded a Spearman’s rho value of 0.15, indicating a very low degree of correlation between the original study and our reproduction. As shown in a map of the difference between the original study and our reproduction (fig. xx), the reproduction consistently yielded lower vulnerability scores.
+We failed to reproduce the original study’s assessment of climate vulnerability (fig. xx). There was broad disagreement between our reproduction (fig. 2) and a digitized version of the original study’s map of climate vulnerability (fig. xx), as shown in figure xx.  A confusion matrix comparing the two maps (fig. xx) yielded a Spearman’s rho value of 0.15, indicating a very low degree of correlation between the original study and our reproduction. As shown in a map of the difference between the original study and our reproduction (fig. 4), the reproduction consistently yielded lower vulnerability scores.
 
 
 ![Adaptive Capacity by TA – Reproduction Results](/assets/ac_2010.png)
