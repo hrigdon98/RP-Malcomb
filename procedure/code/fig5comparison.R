@@ -36,6 +36,13 @@ fig5comppts = st_as_sf(fig5comp)
 # convert raster to vector points to simplify plotting and correlation testing
 
 plot(fig5comppts$or, fig5comppts$rp, xlab="Original Study", ylab="Reproduction")
+abline(a=0, b=1)
+title("Comparing Vulnerability Scores")
+
+scatter = fig5comppts %>% ggplot(aes(x = or, y = rp, colour = 'green'))+
+  labs(x = "Original Study", y = "Reproduction")
+plot(scatter)
+  
 # create scatterplot of original results and reproduction results
 
 cor.test(fig5comppts$or, fig5comppts$rp, method="spearman")

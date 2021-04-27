@@ -151,6 +151,12 @@ We failed to reproduce the original study’s assessment of climate vulnerabilit
 
 &ensp;
 
+![Scatterplot of Vulnerability Comparison](/assets/scatterplot.png)
+
+**Figure 6.** Scatterplot comparing vulnerability scores from the original study to the results of the reproduction.
+
+&ensp;
+
 ## Unplanned Deviations from the Protocol
 
 In our initial understanding of this workflow, we planned to rasterize all of our data as our first step in order to perform the analysis. Malcomb’s methodology described the DHS indicators as “disaggregated” so we were under the impression that we needed to reduce the DHS data to the smallest scale possible. We had then planned on using zonal statistics and summarizing by region to achieve the final vectorized results. Given the ambiguous language of disaggregation, we were uncertain about the scale at which to conduct the bulk of our analysis. Malcomb’s methodology also included contradictory language about the normalization of the DHS indicators. Malcomb described the indicators as ranging from “zero representing the worst condition for a household and five being the best” but then goes on to refer to “quintiles” of households, making it unclear whether or not the DHS indicators were normalized into five or six categories (Malcomb 22).
