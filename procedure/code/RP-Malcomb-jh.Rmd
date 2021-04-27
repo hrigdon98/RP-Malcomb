@@ -288,11 +288,11 @@ ta = left_join(
   by = c("ID_2" = "ta_id")
 )
 
-ta = left_join(
-  ta,
-  select(lhz_sensitivity, ta_id, sensitivity = sensitivity_avg),
-  by = c("ID_2" = "ta_id")
-)
+#ta = left_join(
+#  ta,
+#  select(lhz_sensitivity, ta_id, sensitivity = sensitivity_avg),
+#  by = c("ID_2" = "ta_id")
+#)
 
 # making capacity score resemble malcomb et al's work - assets and access weighted by 20%
  ta = mutate(ta, capacity_2010 = capacity_2010 * 20)
@@ -434,7 +434,7 @@ vulnerability = function(geo, lhz_raster) {
 ```{r creating final vulnerability layers}
 ta_final = vulnerability(ta_capacity, lhz_capacity)
 
-#ta_2010$vuln = aggregate(ta_final,ta_2010,mean)$capacity_2010
+ta_2010$vuln = aggregate(ta_final,ta_2010,mean)$capacity_2010
 
 #????
 ta_2010$vuln2 = aggregate(ta_final,ta_2010,mean)$capacity_sensitivity
@@ -451,17 +451,16 @@ lakes = st_as_sf(read_csv(here(public_r, "major_lakes.csv"))[, c("name", "the_ge
   mutate(EA = "Major Lakes of Malawi")
 
 # creates a layer of national parks/reserves
-ea = ta %>%
+ea = lhz %>%
   st_transform(3395) %>%  #transform to world mercator (jh: not sure if we need to transform to 3395 and back here?)
   summarize %>%  
   st_geometry %>%  #dissolve to one feature / one geometry
   st_intersection(st_geometry(st_transform(ta, 3395))) %>%   #intersect with traditional authorities to clip them
   st_transform(4326) %>%
-  st_sf %>%   #make into new simple features data frame
+  st_sf %>%  #make into new simple features data frame
   mutate(EA = case_when(
     grepl("Reserve", ta[["NAME_2"]]) | grepl("Park", ta[["NAME_2"]]) ~ "National Parks and Reserves",
-    T ~ "Missing Data")   # search and replace names- anything with Reserve or Park in the name becomes National Parks and Reserves
-  ) %>%
+    T ~ "Missing Data") ) %>%   # search and replace names- anything with Reserve or Park in the name becomes National Parks and Reserves
   rbind(lakes) %>%  # combines with lakes to make one natural features layer
   st_make_valid()
 
@@ -514,11 +513,11 @@ vuln_map = ggplot() +
   scale_fill_gradient(
     low = "#FFFF75",
     high = "#CF4611",
-    breaks = c(17.39,  25.21),
+    breaks = c(10.41,  19.07),
     labels = c("Lower Vulnerability", "Higher Vulnerability"),
     na.value = "transparent",
     guide = "colourbar",
-    limits = c(17.39,  25.21)
+    limits = c(10.41,  19.07)
   ) +
   scale_x_continuous(breaks = c(33,34,35,36)) +
   labs(title = "Malawi Vulnerability to Climate Change") +
@@ -544,7 +543,7 @@ ggsave(
   units = "in"
 )
 ggsave(
-  here("results","maps","vulnerability.png"),
+  here("results","maps","vulnerability2.png"),
   plot = vuln_map,
   width = 8.5,
   height = 11,
@@ -594,6 +593,34 @@ cor.test(fig4compare$resilience,fig4compare$rp_res,method="spearman")
 
 fig4compare = mutate(fig4compare, difference = rp_res - resilience) 
 # Calculate difference between the maps so that you can create a difference map
+
+map3 =ggplot() +
+  geom_sf(data = ea,
+          aes(fill = EA),
+          color = NA) +
+  geom_sf(
+    data = fig4compare,
+    aes(fill = factor(difference)),
+    color = "white",
+    lwd = .2
+  ) + 
+  scale_fill_manual("Reproduction With Respect \nTo Original Study",
+                    limits = c("-2","-1","0","1","2","Missing Data","Major Lakes of Malawi","National Parks and Reserves"), 
+                    labels = c(
+                      "-2" = "Two Intervals Lower",
+                      "-1" = "One Interval Lower",
+                      "0" = "Match",
+                      "1" = "One Interval Higher",
+                      "2" = "Two Intervals Higher",
+                      "Missing Data" = "Missing Data",
+                      "Major Lakes of Malawi" = "Major Lakes of Malawi",
+                      "National Parks and Reserves" = "National Parks and Reserves"
+                    ),
+                    values = c("-2"="#e66101","-1"="#fdb863","0"="#cccccc","1"="#9f95cc","2"="#5e3c99","Missing Data"="#8a8a8a","Major Lakes of Malawi"="lightblue","National Parks and Reserves"="#D9EABB"))+
+  scale_x_continuous(breaks = c(33,34,35,36)) +
+  labs(title = "Comparing Adaptive Capacity Results", subtitle = "Original Study vs. Reproduction") +
+  theme_minimal()
+map3
 ```
 
 ```{r}
@@ -648,7 +675,13 @@ cor.test(fig5comppts$or, fig5comppts$rp, method="spearman")
 
 ```{r}
 # plotting difference map for figure 4
-
+ggsave(
+  here("results","maps","ac_difference.png"),
+  plot = map3,
+  width = 8.5,
+  height = 11,
+  units = "in"
+)
 ```
 
 ```{r}
