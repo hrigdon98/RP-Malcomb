@@ -190,9 +190,13 @@ The mapping of vulnerability, or any data that reflects the unequal distribution
 
 ## References
 
+Longley, Paul, ed. 2005. Geographical Information Systems and Science. 2nd ed. Chichester ; Hoboken, NJ: Wiley.
+
 Malcomb, D. W., E. A. Weaver, and A. R. Krakowka. 2014. Vulnerability modeling for sub-Saharan Africa: An operationalized approach in Malawi. Applied Geography 48:17–30. DOI:[10.1016/j.apgeog.2014.01.004](https://doi.org/10.1016/j.apgeog.2014.01.004)
 
+Pelling, Mark. 2011. Adaptation to Climate Change: From Resilience to Transformation. London ; New York: Routledge.
 
+Tate, E. 2013. Uncertainty Analysis for a Social Vulnerability Index. Annals of the Association of American Geographers 103 (3):526–543. doi:[10.1080/00045608.2012.700616](https://doi.org/10.1080/00045608.2012.700616).
 
 ####  Report Template References & License
 
